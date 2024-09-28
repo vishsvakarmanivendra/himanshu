@@ -8,12 +8,12 @@
     ],
     "routes": [
         {
-            "src": "/route/(.*)",
-            "dest": "/route/router.js"
+            "src": "/user/(.*)",
+            "dest": "/route/userRouter.js"
         },
         {
-            "src": "/(.*)",
-            "dest": "/app.js"
+            "src": "/vendor/(.*)",
+            "dest": "/route/vendorRouter.js"
         }
     ]
 }
