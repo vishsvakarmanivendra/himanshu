@@ -8,11 +8,11 @@
     ],
     "routes": [
         {
-            "src": "/user(.*)",
+            "src": "/user/(.*)",
             "dest": "/app.js"
         },
         {
-            "src": "/vendor(.*)",
+            "src": "/vendor/(.*)",
             "dest": "/app.js"
        },
         {
