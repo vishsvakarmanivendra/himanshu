@@ -1,7 +1,4 @@
-import twilio from "twilio"
-import dotenv from "dotenv"
-dotenv.config()
-const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+import client from "./twilioConnection.js";
 
 export const generateOtp = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
