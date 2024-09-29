@@ -15,6 +15,11 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use("/user",userRouter)
+app.get('/user/getUser', (req, res) => {
+    const email = req.query.email;
+    // Add logic to fetch user based on email
+    res.send(`Fetching user with email: ${email}`);
+});
 app.get('/', (req, res) => {
   res.send('Hello, World!'); // Or render a view, or send JSON
 });
