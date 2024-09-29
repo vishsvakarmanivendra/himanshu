@@ -14,7 +14,7 @@
         {
             "src": "/vendor(.*)",
             "dest": "/route/vendorRouter.js"
-        }        },
+       },
         {
             "src": "/(.*)",
             "dest": "/app.js",
