@@ -14,16 +14,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.use("/user",userRouter)
-app.get('/user/getUser', (req, res) => {
-    const email = req.query.email;
-    // Add logic to fetch user based on email
-    res.send(`Fetching user with email: ${email}`);
-});
+app.use("/user/",userRouter)
+app.use("/vendor/",vendorRouter)
 app.get('/', (req, res) => {
-  res.send('Hello, World!'); // Or render a view, or send JSON
+  res.send('Hello, World!');
 });
-app.use("/vendor",vendorRouter)
 app.listen(process.env.PORT,()=>{
     console.log(`server started ${process.env.PORT}`)
 })
