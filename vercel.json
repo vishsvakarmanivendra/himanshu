@@ -9,12 +9,12 @@
     "routes": [
         {
             "src": "/user/(.*)",
-            "dest": "/route/userRouter.js"
+            "dest": "/app.js"
         },
         {
             "src": "/vendor/(.*)",
-            "dest": "/route/vendorRouter.js"
-       },
+            "dest": "/app.js"
+        },
         {
             "src": "/(.*)",
             "dest": "/app.js",
