@@ -15,6 +15,9 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use("/user",userRouter)
+app.get('/', (req, res) => {
+  res.send('Hello, World!'); // Or render a view, or send JSON
+});
 app.use("/vendor",vendorRouter)
 app.listen(process.env.PORT,()=>{
     console.log(`server started ${process.env.PORT}`)
