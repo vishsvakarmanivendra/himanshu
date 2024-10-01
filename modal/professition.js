@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db/dbconection.js";
+import sequelize from "../db/dbconection";
 const sequelize = new Sequelize()
 const Peofasstion = sequelize.define('User', {
 profasion:{
