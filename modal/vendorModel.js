@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/dbconection.js";
-const Vendor = sequelize.define('User', {
+
+const Vendor = sequelize.define('Vendor', {
     firstName: {
         type: DataTypes.STRING,
         allowNull: false
@@ -19,14 +20,16 @@ const Vendor = sequelize.define('User', {
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true // Ensure no duplicate emails
     },
     password: {
         type: DataTypes.STRING,
         allowNull: false
     },
     phone: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true // Ensure phone numbers are unique (optional)
     },
     address: {
         type: DataTypes.STRING,
@@ -46,30 +49,39 @@ const Vendor = sequelize.define('User', {
     },
     otp: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue:1234
     },
     otpExpiry: {
         type: DataTypes.DATE,
+        allowNull:false,
+        defaultValue: () => new Date(Date.now() + 15 * 60 * 1000)
+    },
+    image: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    image:{
-        type:DataTypes.STRING,
-        allowNull:false
+    adhar: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    adhar:{
-        type:DataTypes.STRING,
-        allowNull:false
+    profession: {
+        type: DataTypes.STRING, // Fixed typo: 'professtion' to 'profession'
+        allowNull: false
     },
-    professtion:{
-        type:DataTypes.STRING,
-        allowNull:false
+    status: {
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'), // Status to track approval
+        defaultValue: 'pending',
+        allowNull: false
     }
-})
+});
 
-Vendor.sync().then(res=>{
-console.log("all good")
-}).catch(err=>{
-console.log("not good")
-})
+Vendor.sync()
+    .then(() => {
+        console.log("Vendor table synced successfully.");
+    })
+    .catch(err => {
+        console.error("Failed to sync Vendor table:", err);
+    });
 
 export default Vendor;

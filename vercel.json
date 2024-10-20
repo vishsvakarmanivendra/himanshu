@@ -16,6 +16,18 @@
             "dest": "/app.js"
         },
         {
+            "src": "/admin/(.*)",
+            "dest": "/app.js"
+        },
+        {
+            "src": "/category/(.*)",
+            "dest": "/app.js"
+        },
+        {
+            "src": "/subCategory/(.*)",
+            "dest": "/app.js"
+        },
+        {
             "src": "/(.*)",
             "dest": "/app.js",
             "headers": {
