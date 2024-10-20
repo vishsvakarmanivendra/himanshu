@@ -14,7 +14,7 @@ sequelize.authenticate().then(result=>{
     console.log(err);
 });
 
-// export default sequelize;
+export default sequelize;
 
 // import { Sequelize } from "sequelize";
 // import dotenv from "dotenv"
