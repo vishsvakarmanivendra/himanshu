@@ -1,5 +1,7 @@
 import Vendor from "../modal/vendorModel.js";
-import bcryptjs from "bcryptjs"
+import bcryptjs from "bcryptjs";
+
+// Vendor Sign In
 export const signIn = async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ where: { email: req.body.email } });
@@ -17,25 +19,27 @@ export const signIn = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    res.status(200).json({ message: "Sign-in successful", vendor });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
+// Vendor Sign Up
 export const signUp = async (req, res) => {
   try {
     const existingVendor = await Vendor.findOne({ where: { email: req.body.email } });
 
     if (existingVendor) {
-      return res.status(200).json({ message: "Email already registered" });
+      return res.status(409).json({ message: "Email already registered" });
     }
 
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
 
     req.body.password = hashedPassword;
-    req.body.status = 'pending';
+    req.body.status = 'pending'; // Set vendor status to pending
 
     const newVendor = await Vendor.create(req.body);
 
@@ -49,6 +53,7 @@ export const signUp = async (req, res) => {
   }
 };
 
+// Update Vendor Profile
 export const update = async (req, res) => {
   try {
     const { email } = req.body;
@@ -60,17 +65,17 @@ export const update = async (req, res) => {
     }
 
     if (vendor.status !== 'approved') {
-      return res.status(403).json({ message: "You can only update your profile after approval by admin." });
+      return res.status(403).json({ message: "You can only update your profile after admin approval." });
     }
 
     // If password needs to be updated, hash it
     if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
+      const salt = await bcryptjs.genSalt(10);
+      req.body.password = await bcryptjs.hash(req.body.password, salt);
     }
 
     // Update the vendor with the new data (only allow certain fields)
-    const allowedUpdates = ['firstName', 'lastName', 'phone', 'address', 'city', 'state', 'country', 'image', 'password'];
+    const allowedUpdates = ['firstName', 'lastName', 'phone', 'currentLocation', 'categories', 'workExperience', 'description', 'profilePhoto', 'serviceArea', 'toolsAvailable', 'password'];
     const updates = Object.keys(req.body).filter(key => allowedUpdates.includes(key));
 
     updates.forEach(update => vendor[update] = req.body[update]);
@@ -84,21 +89,23 @@ export const update = async (req, res) => {
   }
 };
 
+// Get Vendor Information
 export const getVendor = async (req, res) => {
   try {
-    const Vendor = await Vendor.findOne({ where: { email: req.query.email } });
+    const vendor = await Vendor.findOne({ where: { email: req.query.email } });
 
-    if (!Vendor) {
+    if (!vendor) {
       return res.status(404).json({ message: "Vendor not found" });
     }
 
-    return res.status(200).json({ Vendor });
+    return res.status(200).json({ vendor });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
+// Verify Phone Number OTP
 export const verifyPhoneNumber = async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ where: { email: req.body.email } });
@@ -109,11 +116,11 @@ export const verifyPhoneNumber = async (req, res) => {
 
     const currentDate = new Date();
 
-    if (vendor.otp === req.body.otp && currentDate < Vendor.otpExpiry) {
+    if (vendor.otp === req.body.otp && currentDate < vendor.otpExpiry) {
       return res.status(200).json({ message: "Valid OTP" });
     }
 
-    return res.status(409).json({ message: "OTP timed out" });
+    return res.status(409).json({ message: "OTP expired or invalid" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });

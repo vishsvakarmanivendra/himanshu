@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs"; 
+import bcrypt from "bcryptjs";
 import User from "../modal/userModal.js";
 import dotenv from "dotenv";
-import { generateOtp, sendOtp } from "../utils/utility.js"; 
+import { generateOtp, sendOtp } from "../utils/utility.js";
 dotenv.config();
 
 export const signIn = async (req, res) => {
@@ -16,19 +16,7 @@ export const signIn = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(404).json({ message: "Unauthorized user" });
     }
-
-    const otp = await generateOtp();
-    const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // Set OTP expiry for 15 minutes
-
-    const result = await User.update({ otp, otpExpiry }, { where: { email: user.email } });
-
-    if (result[0] === 0) {
-      return res.status(409).json({ message: "Something went wrong" });
-    }
-
-    await sendOtp(req.body.phone, otp);
-    return res.status(200).json({ message: "OTP sent" });
-    
+    return res.status(200).json({ message: "sign in successfully" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
@@ -40,13 +28,22 @@ export const signUp = async (req, res) => {
     const existingUser = await User.findOne({ where: { email: req.body.email } });
 
     if (existingUser) {
-      return res.status(200).json({ message: "Already have an account" });
+      return res.status(200).json({ message: "Email already registered" });
     }
 
     const salt = await bcrypt.genSalt(10);
     req.body.password = await bcrypt.hash(req.body.password, salt);
 
-    await User.create(req.body);
+    // Create new user
+    await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phone,
+      currentLocation: req.body.currentLocation,
+      password: req.body.password,
+    });
+
     return res.status(201).json({ message: "User signed up successfully" });
 
   } catch (err) {
@@ -63,8 +60,13 @@ export const update = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update user fields as needed
-    await User.update(req.body, { where: { email: user.email } });
+    // Update user fields
+    await User.update({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phone: req.body.phone,
+      currentLocation: req.body.currentLocation,
+    }, { where: { email: user.email } });
 
     return res.status(200).json({ message: "User updated successfully" });
 

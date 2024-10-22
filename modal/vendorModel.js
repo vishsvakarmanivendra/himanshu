@@ -10,78 +10,86 @@ const Vendor = sequelize.define('Vendor', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    gender: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    dob: {
-        type: DataTypes.DATE,
-        allowNull: false
-    },
     email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true // Ensure no duplicate emails
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     phone: {
         type: DataTypes.STRING,
-        unique: true // Ensure phone numbers are unique (optional)
+        allowNull: false,
+        unique: true // Ensure phone numbers are unique
     },
-    address: {
+    adhar: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true // Ensure unique Aadhaar numbers
+    },
+    currentLocation: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    city: {
-        type: DataTypes.STRING,
+    categories: {
+        type: DataTypes.JSON, // Store categories as a JSON array
+        allowNull: false,
+        validate: {
+            isArray(value) {
+                if (!Array.isArray(value)) {
+                    throw new Error('Categories must be an array');
+                }
+                if (value.length < 1 || value.length > 3) {
+                    throw new Error('Vendor must select at least 1 and at most 3 categories');
+                }
+            }
+        }
+    },
+    workExperience: {
+        type: DataTypes.INTEGER, // Storing work experience in years
+        allowNull: false,
+    },
+    description: {
+        type: DataTypes.TEXT, // Allows for a longer description
         allowNull: false
     },
-    state: {
-        type: DataTypes.STRING,
+    profilePhoto: {
+        type: DataTypes.STRING, // Store URL/path to profile photo
         allowNull: false
     },
-    country: {
+    serviceArea: {
+        type: DataTypes.STRING, // Area where services are provided
+        allowNull: false
+    },
+    toolsAvailable: {
+        type: DataTypes.BOOLEAN, // Whether working tools are available or not
+        allowNull: false
+    },
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     },
     otp: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue:1234
+        defaultValue: '1234'
     },
     otpExpiry: {
         type: DataTypes.DATE,
-        allowNull:false,
+        allowNull: false,
         defaultValue: () => new Date(Date.now() + 15 * 60 * 1000)
     },
-    image: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    adhar: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    profession: {
-        type: DataTypes.STRING, // Fixed typo: 'professtion' to 'profession'
-        allowNull: false
-    },
     status: {
-        type: DataTypes.ENUM('pending', 'approved', 'rejected'), // Status to track approval
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'), // Approval status
         defaultValue: 'pending',
         allowNull: false
-    }
+    },
 });
 
 Vendor.sync()
-    .then(() => {
-        console.log("Vendor table synced successfully.");
-    })
-    .catch(err => {
-        console.error("Failed to sync Vendor table:", err);
-    });
+  .then(() => {
+    console.log("Vendor table created successfully.");
+  })
+  .catch((err) => {
+    console.error("Failed to create Vendor table:", err);
+  });
 
 export default Vendor;

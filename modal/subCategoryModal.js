@@ -11,6 +11,9 @@ const Subcategory = sequelize.define('Subcategory', {
   description: {
     type: DataTypes.STRING,
   },
+  subCategoryImage: {
+    type: DataTypes.STRING
+  },
   categoryId: {
     type: DataTypes.INTEGER,
     references: {
@@ -22,12 +25,19 @@ const Subcategory = sequelize.define('Subcategory', {
   tableName: 'subcategories',
   timestamps: true,
 });
-
+Category.sync()
+  .then(() => {
+    console.log("Vendor table created successfully.");
+  })
+  .catch((err) => {
+    console.error("Failed to create Vendor table:", err);
+  });
 Category.hasMany(Subcategory, { foreignKey: 'categoryId' });
 Subcategory.belongsTo(Category, { foreignKey: 'categoryId' });
-Subcategory.sync().then(res=>{
-    console.log("all good")
-    }).catch(err=>{
-    console.log("not good")
-    })
+Subcategory.sync().then(res => {
+  console.log("all good")
+}).catch(err => {
+  console.log("not good")
+})
+
 export default Subcategory;

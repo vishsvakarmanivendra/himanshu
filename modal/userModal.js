@@ -1,67 +1,46 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/dbconection.js";
+
 const User = sequelize.define('User', {
     firstName: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false // Required field
     },
     lastName: {
         type: DataTypes.STRING,
-        allowNull: true
-    },
-    gender: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    dob: {
-        type: DataTypes.DATE,
-        allowNull: true
+        allowNull: false // Required field
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false, // Required field
+        unique: true, // Ensure no duplicate emails
+        validate: {
+            isEmail: true // Ensure valid email format
+        }
     },
     phone: {
+        type: DataTypes.STRING,
+        allowNull: false, // Required field
+        unique: true // Ensure unique phone numbers
+    },
+    currentLocation: {
+        type: DataTypes.STRING,
+        allowNull: false // Required field
+    },
+    password: {
         type: DataTypes.STRING
     },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    city: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    state: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    country: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    otp: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    otpExpiry: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    image:{
-        type:DataTypes.STRING,
-        allowNull:true
+    userImage: {
+        type: DataTypes.STRING
     }
-})
+});
 
-User.sync().then(res=>{
-console.log("all good")
-}).catch(err=>{
-console.log("not good")
-})
+User.sync()
+    .then(() => {
+        console.log("User table synced successfully.");
+    })
+    .catch((err) => {
+        console.error("Failed to sync User table:", err);
+    });
 
 export default User;

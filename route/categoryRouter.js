@@ -3,8 +3,8 @@ import { createCategory, deleteCategory, getAllCategories, getCategoryById, upda
 const router = express.Router();
 
 router.post('/categories',createCategory);
-router.get('/categories',getAllCategories);
-router.get('/categories/:id',getCategoryById);
+router.get('/getAllCategories',getAllCategories);
+router.get('/getCategoryById',getCategoryById);
 router.put('/update',updateCategory);
 router.delete('/deleteCategory',deleteCategory);
 
