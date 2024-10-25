@@ -20,7 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.get('/',homeRouter);
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+  });
 app.use("/user/",userRouter)
 app.use("/vendor/",vendorRouter)
 app.use("/admin/",adminRouter)
