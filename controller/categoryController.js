@@ -1,12 +1,14 @@
 
 import Category from "../modal/categoryModal.js";
-
+import { Sequelize } from "sequelize";
 export const createCategory = async (req, res) => {
   try {
-    const { name} = req.body;
+    const { name } = req.body;
     const newCategory = await Category.create({ name });
     res.status(201).json(newCategory);
   } catch (error) {
+    if (error instanceof Sequelize.UniqueConstraintError)
+      return res.status(400).json({ message: "The provided name is already in use." });
     res.status(500).json({ error: error.message });
   }
 };
@@ -39,7 +41,7 @@ export const updateCategory = async (req, res) => {
     if (category) {
       const { name } = req.body;
       await category.update({ name });
-      res.status(200).json(category);DD
+      res.status(200).json(category);
     } else {
       res.status(404).json({ message: 'Category not found' });
     }

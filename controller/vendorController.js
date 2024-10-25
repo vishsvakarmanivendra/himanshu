@@ -1,7 +1,12 @@
 import Vendor from "../modal/vendorModel.js";
 import bcryptjs from "bcryptjs";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const filePath = path.join(__dirname, '..', 'public', 'vendor');
 
-// Vendor Sign In
 export const signIn = async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ where: { email: req.body.email } });
@@ -28,6 +33,8 @@ export const signIn = async (req, res) => {
 
 // Vendor Sign Up
 export const signUp = async (req, res) => {
+  let file = await (req.file) ? req.file.filename : null;
+  req.body.profilePhoto=file;
   try {
     const existingVendor = await Vendor.findOne({ where: { email: req.body.email } });
 
@@ -48,13 +55,21 @@ export const signUp = async (req, res) => {
       vendor: newVendor
     });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    if (file) {
+      fs.unlink(`${filePath}/${file}`, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error("Error deleting file:", unlinkErr);
+        }
+      });
+    }
+    return res.status(500).json({ message: "Internal server error"});
   }
 };
 
 // Update Vendor Profile
 export const update = async (req, res) => {
+  let file = await (req.file) ? req.file.filename : null;
+  req.body.profilePhoto=file;
   try {
     const { email } = req.body;
 
@@ -73,7 +88,11 @@ export const update = async (req, res) => {
       const salt = await bcryptjs.genSalt(10);
       req.body.password = await bcryptjs.hash(req.body.password, salt);
     }
-
+    fs.unlink(`${filePath}/${vendor.profilePhoto}`, (unlinkErr) => {
+      if (unlinkErr) {
+        console.error("Error deleting file:", unlinkErr);
+      }
+    });
     // Update the vendor with the new data (only allow certain fields)
     const allowedUpdates = ['firstName', 'lastName', 'phone', 'currentLocation', 'categories', 'workExperience', 'description', 'profilePhoto', 'serviceArea', 'toolsAvailable', 'password'];
     const updates = Object.keys(req.body).filter(key => allowedUpdates.includes(key));
@@ -84,7 +103,13 @@ export const update = async (req, res) => {
 
     return res.status(200).json({ message: "Vendor updated successfully", vendor });
   } catch (err) {
-    console.error(err);
+    if (file) {
+      fs.unlink(`${filePath}/${file}`, (unlinkErr) => {
+        if (unlinkErr) {
+          console.error("Error deleting file:", unlinkErr);
+        }
+      });
+    }
     return res.status(500).json({ message: "Internal server error" });
   }
 };
