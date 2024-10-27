@@ -15,7 +15,7 @@ const Service = sequelize.define('Service', {
     },
     vendorId: {
         type: DataTypes.INTEGER,
-        allowNull: false,  // Ensure vendorId is mandatory
+        allowNull: false, 
         references: {
             model: Vendor,
             key: 'id'
@@ -23,7 +23,7 @@ const Service = sequelize.define('Service', {
     },
     categoryId: {
         type: DataTypes.INTEGER,
-        allowNull: false,  // Ensure categoryId is mandatory
+        allowNull: false,
         references: {
             model: Category,
             key: 'id'
@@ -31,7 +31,7 @@ const Service = sequelize.define('Service', {
     },
     subCategoryId: {
         type: DataTypes.INTEGER,
-        allowNull: false,  // Ensure subCategoryId is mandatory
+        allowNull: false,
         references: {
             model: Subcategory,
             key: 'id'

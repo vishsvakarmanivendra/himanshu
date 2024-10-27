@@ -7,7 +7,7 @@ route.post('/getAdmin', getAllAdmins)
 route.get('/admins/:id', getAdminById)
 route.put('/update', updateAdmin)
 route.delete('/admins/:id', deleteAdmin)
-route.get('/vendors/pending', getPendingVendors); // Fetch pending vendors for admin
-route.put('/vendors/status', updateVendorStatus); // Admin approves/rejects vendor
+route.get('/vendors/pending', getPendingVendors);
+route.put('/vendors/status', updateVendorStatus);
 
 export default route;

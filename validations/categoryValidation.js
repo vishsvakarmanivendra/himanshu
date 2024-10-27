@@ -1,6 +1,5 @@
 import { check } from 'express-validator';
 
-// Validation rules for creating/updating a category
 export const categoryValidationRules = [
     check('name')
         .notEmpty()

@@ -1,49 +1,90 @@
 import Cart from "../modal/cart.js";
-// Add item to cart
+import Service from "../modal/services.js";
+import CartItem from "../modal/cartItemModal.js";
+
 export const addToCart = async (req, res) => {
   try {
     const { userId, serviceId, quantity } = req.body;
-    const cartItem = await Cart.create({ userId, serviceId, quantity });
-    res.status(201).json({ message: "Item added to cart", cartItem });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to add item to cart",s:error });
-  }
-};
 
-// Get user's cart items
-export const getUserCart = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const cartItems = await Cart.findAll({
-      where: { userId },
+    let cart = await Cart.findOne({ where: { userId } });
+    if (!cart) {
+      cart = await Cart.create({ userId });
+    }
+
+    let cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, serviceId }
     });
-    res.status(200).json({ cartItems });
+
+    if (cartItem) {
+      cartItem.quantity += quantity*1;
+      await cartItem.save();
+    } else {
+      cartItem = await CartItem.create({
+        cartId: cart.id,
+        serviceId,
+        quantity
+      });
+    }
+
+    res.status(201).json({ message: 'Item added to cart', cartItem });
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve cart items" });
+    res.status(500).json({ message: 'Failed to add item to cart', error });
   }
 };
 
-// Update cart item quantity
-export const updateCartQuantity = async (req, res) => {
+export const updateCartItem = async (req, res) => {
   try {
-    const { cartId, quantity } = req.body;
-    const cartItem = await Cart.findByPk(cartId);
-    if (!cartItem) return res.status(404).json({ error: "Cart item not found" });
-    cartItem.quantity = quantity;
+    const { cartItemId, quantity } = req.body;
+
+    const cartItem = await CartItem.findByPk(cartItemId);
+    if (!cartItem) {
+      return res.status(404).json({ message: 'Cart item not found' });
+    }
+
+    cartItem.quantity = quantity*1;
     await cartItem.save();
-    res.status(200).json({ message: "Cart item updated", cartItem });
+
+    res.json({ message: 'Cart item updated', cartItem });
   } catch (error) {
-    res.status(500).json({ error: "Failed to update cart item" });
+    res.status(500).json({ message: 'Failed to update cart item', error });
   }
 };
 
-// Remove item from cart
-export const removeFromCart = async (req, res) => {
+export const getCartItems = async (req, res) => {
   try {
-    const cartId = req.params.cartId;
-    await Cart.destroy({ where: { id: cartId } });
-    res.status(200).json({ message: "Item removed from cart" });
+    const { userId } = req.params;
+
+    const cart = await Cart.findOne({
+      where: { userId },
+      include: {
+        model: CartItem,
+        include: [Service]
+      }
+    });
+
+    if (!cart || cart.CartItems.length === 0) {
+      return res.status(404).json({ message: 'Cart is empty' });
+    }
+
+    res.json(cart.CartItems);
   } catch (error) {
-    res.status(500).json({ error: "Failed to remove item from cart" });
+    res.status(500).json({ message: 'Failed to retrieve cart items', error });
+  }
+};
+
+export const removeCartItem = async (req, res) => {
+  try {
+    const { cartItemId } = req.params;
+
+    const cartItem = await CartItem.findByPk(cartItemId);
+    if (!cartItem) {
+      return res.status(404).json({ message: 'Cart item not found' });
+    }
+
+    await cartItem.destroy();
+
+    res.json({ message: 'Cart item removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to remove cart item', error });
   }
 };

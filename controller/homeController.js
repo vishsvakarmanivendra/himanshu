@@ -4,10 +4,10 @@ import Subcategory from "../modal/subCategoryModal.js";
 export const getAllCategoriesWithSubcategories = async (req, res) => {
   try {
     const categories = await Category.findAll({
-        attributes: ['id', 'name'], // Select only id and name from Category
+        attributes: ['id', 'name'],
         include: [{
           model: Subcategory,
-          attributes: ['id', 'name', 'subCategoryImage'] // Select only id, name, and subCategoryImage from Subcategory
+          attributes: ['id', 'name', 'subCategoryImage']
         }]
     });
     

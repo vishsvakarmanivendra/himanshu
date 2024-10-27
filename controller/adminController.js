@@ -89,7 +89,7 @@ export const getPendingVendors = async (req, res) => {
 
 export const updateVendorStatus = async (req, res) => {
   try {
-    const { vendorId, status } = req.body; // 'approved' or 'rejected'
+    const { vendorId, status } = req.body; 
 
     const vendor = await Vendor.findByPk(vendorId);
     if (!vendor) {

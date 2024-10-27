@@ -11,6 +11,7 @@ import subCategoryRouter from "./route/subCategoryRouter.js"
 import homeRouter from "./route/homeRouter.js"
 import serviceRouter from "./route/serviceRoute.js"
 import cartRouter from "./route/cartRoute.js"
+import orderRoute from "./route/orderRoute.js"
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -30,6 +31,7 @@ app.use("/category/",categoryRouter)
 app.use("/subcategory/",subCategoryRouter)
 app.use("/service/",serviceRouter)
 app.use("/cart/",cartRouter)
+app.use("/order/",orderRoute)
 
 app.listen(process.env.PORT,()=>{
     console.log(`server started ${process.env.PORT}`)

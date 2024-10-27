@@ -1,4 +1,3 @@
-// /models/Subcategory.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/dbconection.js';
 import Category from './categoryModal.js';

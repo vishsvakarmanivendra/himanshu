@@ -4,28 +4,28 @@ import sequelize from "../db/dbconection.js";
 const User = sequelize.define('User', {
     firstName: {
         type: DataTypes.STRING,
-        allowNull: false // Required field
+        allowNull: false 
     },
     lastName: {
         type: DataTypes.STRING,
-        allowNull: false // Required field
+        allowNull: false 
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false, // Required field
-        unique: true, // Ensure no duplicate emails
+        allowNull: false, 
+        unique: true, 
         validate: {
-            isEmail: true // Ensure valid email format
+            isEmail: true 
         }
     },
     phone: {
         type: DataTypes.STRING,
-        allowNull: false, // Required field
-        unique: true // Ensure unique phone numbers
+        allowNull: false, 
+        unique: true 
     },
     currentLocation: {
         type: DataTypes.STRING,
-        allowNull: false // Required field
+        allowNull: false 
     },
     password: {
         type: DataTypes.STRING

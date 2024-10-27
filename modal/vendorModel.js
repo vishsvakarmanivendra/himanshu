@@ -13,24 +13,24 @@ const Vendor = sequelize.define('Vendor', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true // Ensure no duplicate emails
+        unique: true 
     },
     phone: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true // Ensure phone numbers are unique
+        unique: true 
     },
     adhar: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true // Ensure unique Aadhaar numbers
+        unique: true 
     },
     currentLocation: {
         type: DataTypes.STRING,
         allowNull: false
     },
     categories: {
-        type: DataTypes.JSON, // Store categories as a JSON array
+        type: DataTypes.JSON, 
         allowNull: false,
         validate: {
             isArray(value) {
@@ -44,23 +44,23 @@ const Vendor = sequelize.define('Vendor', {
         }
     },
     workExperience: {
-        type: DataTypes.INTEGER, // Storing work experience in years
+        type: DataTypes.INTEGER, 
         allowNull: false,
     },
     description: {
-        type: DataTypes.TEXT, // Allows for a longer description
+        type: DataTypes.TEXT, 
         allowNull: false
     },
     profilePhoto: {
-        type: DataTypes.STRING, // Store URL/path to profile photo
+        type: DataTypes.STRING, 
         allowNull: false
     },
     serviceArea: {
-        type: DataTypes.STRING, // Area where services are provided
+        type: DataTypes.STRING, 
         allowNull: false
     },
     toolsAvailable: {
-        type: DataTypes.BOOLEAN, // Whether working tools are available or not
+        type: DataTypes.BOOLEAN, 
         allowNull: false
     },
     password: {
@@ -78,7 +78,7 @@ const Vendor = sequelize.define('Vendor', {
         defaultValue: () => new Date(Date.now() + 15 * 60 * 1000)
     },
     status: {
-        type: DataTypes.ENUM('pending', 'approved', 'rejected'), // Approval status
+        type: DataTypes.ENUM('pending', 'approved', 'rejected'), 
         defaultValue: 'pending',
         allowNull: false
     },
