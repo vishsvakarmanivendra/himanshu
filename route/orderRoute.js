@@ -1,9 +1,10 @@
 import express from 'express';
-import { placeOrderFromCart, placeSingleItemOrder } from '../controller/orderController.js';
+import { getVendorOrders, placeOrderFromCart, placeSingleItemOrder } from '../controller/orderController.js';
 
 const router = express.Router();
 
-router.post('/order/cart', placeOrderFromCart);    
-router.post('/order/single', placeSingleItemOrder);
+router.post('/cart', placeOrderFromCart);    
+router.post('/single', placeSingleItemOrder);
+router.get('/:vendorId',getVendorOrders)
 
 export default router;

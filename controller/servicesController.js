@@ -2,6 +2,7 @@ import Category from "../modal/categoryModal.js";
 import Subcategory from "../modal/subCategoryModal.js";
 import Vendor from "../modal/vendorModel.js";
 import Service from "../modal/services.js";
+
 export const createService = async (req, res) => {
   try {
     const { name, price, vendorId, categoryId, subCategoryId } = req.body;
