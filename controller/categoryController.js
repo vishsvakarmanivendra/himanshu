@@ -1,7 +1,10 @@
 
 import Category from "../modal/categoryModal.js";
 import { Sequelize } from "sequelize";
+import { validations } from "../utils/utility.js";
+
 export const createCategory = async (req, res) => {
+  await validations(req)
   try {
     const { name } = req.body;
     const newCategory = await Category.create({ name });
@@ -36,6 +39,7 @@ export const getCategoryById = async (req, res) => {
 };
 
 export const updateCategory = async (req, res) => {
+  await validations(req)
   try {
     const category = await Category.findByPk(req.body.id);
     if (category) {

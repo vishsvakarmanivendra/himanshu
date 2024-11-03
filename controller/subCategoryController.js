@@ -4,11 +4,13 @@ import Subcategory from "../modal/subCategoryModal.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { validations } from "../utils/utility.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const filePath = path.join(__dirname, '..', 'public', 'subcategories');
 
 export const createSubcategory = async (req, res) => {
+  await validations(req)
   let file = await (req.file) ? req.file.filename : null;
   if (!file)
     return res.status(409).json({ message: "bad request" })
@@ -54,6 +56,7 @@ export const getSubcategoryById = async (req, res) => {
 };
 
 export const updateSubcategory = async (req, res) => {
+  await validations(req)
   let newFile = req.file ? req.file.filename : null;
   req.body.subCategoryImage = newFile;
   try {

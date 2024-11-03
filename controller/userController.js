@@ -4,13 +4,14 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { generateOtp, sendOtp } from "../utils/utility.js";
+import { generateOtp, sendOtp, validations } from "../utils/utility.js";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const filePath = path.join(__dirname, '..', 'public', 'user');
 
 export const signIn = async (req, res) => {
+  await validations(req);
   try {
     const user = await User.findOne({ where: { email: req.body.email } });
 
@@ -30,6 +31,7 @@ export const signIn = async (req, res) => {
 };
 
 export const signUp = async (req, res) => {
+  await validations(req);
   let file = await (req.file) ? req.file.filename : null;
   try {
     const existingUser = await User.findOne({ where: { email: req.body.email } });
@@ -66,6 +68,7 @@ export const signUp = async (req, res) => {
 };
 
 export const update = async (req, res) => {
+  await validations(req);
   let newFile = req.file ? req.file.filename : null;
   try {
     const user = await User.findOne({ where: { email: req.body.email } });

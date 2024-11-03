@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import client from "./twilioConnection.js";
 
 export const generateOtp = () => {
@@ -17,4 +18,12 @@ export const sendOtp = async (number,otp) => {
         return { success: false, error: error.message };
     }
 };
+
+export const validations=(req)=>{
+    const validationErr= validationResult(req)
+    if (!validationErr.isEmpty()) {
+      return res.status(400).json({ errors: validationErr.array() });
+    }
+}
+
 
