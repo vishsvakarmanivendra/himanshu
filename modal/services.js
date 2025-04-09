@@ -37,7 +37,16 @@ const Service = sequelize.define('Service', {
             key: 'id'
         }
     },
+    latitude: {
+        type: DataTypes.DECIMAL(10, 8),
+        allowNull: false
+    },
+    longitude: {
+        type: DataTypes.DECIMAL(11, 8),
+        allowNull: false
+    }
 });
+
 
 Vendor.hasMany(Service, { foreignKey: 'vendorId' });
 Service.belongsTo(Vendor, { foreignKey: 'vendorId' });

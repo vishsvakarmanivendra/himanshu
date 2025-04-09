@@ -1,4 +1,3 @@
-// routes.js
 import userRouter from "../route/userRouter.js";
 import vendorRouter from "../route/vendorRouter.js";
 import adminRouter from "../route/adminRoute.js";
@@ -10,9 +9,7 @@ import cartRouter from "../route/cartRoute.js";
 import orderRoute from "../route/orderRoute.js";
 
 export default function initializeRoutes(app) {
-    app.get('/', (req, res) => {
-        res.send('Hello, World!');
-    });
+    app.get("/",homeRouter)
     app.use("/user/", userRouter);
     app.use("/vendor/", vendorRouter);
     app.use("/admin/", adminRouter);

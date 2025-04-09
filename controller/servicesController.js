@@ -2,7 +2,7 @@ import Category from "../modal/categoryModal.js";
 import Subcategory from "../modal/subCategoryModal.js";
 import Vendor from "../modal/vendorModel.js";
 import Service from "../modal/services.js";
-
+import { response } from "express";
 export const createService = async (req, res) => {
   try {
     const { name, price, vendorId, categoryId, subCategoryId } = req.body;
@@ -72,7 +72,7 @@ export const getServiceById = async (req, res) => {
         },
         {
           model: Subcategory,
-          attributes: ['name', 'subCategoryImage'], 
+          attributes: ['name', 'subCategoryImage'],
         }
       ]
     });
@@ -129,4 +129,24 @@ export const deleteService = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+export const servicesBySubCategory = (req, res) => {
+  const { categoryId } = req.query;
+
+  if (!categoryId) {
+    return res.status(400).json({ message: "categoryId is required" });
+  }
+
+  Service.findAll({ where: { subCategoryId:categoryId } })
+    .then((result) => {
+      if (result.length === 0) {
+        return res.status(404).json({ message: "No services found for this category" });
+      }
+      return res.status(200).json({ services: result });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    });
 };
